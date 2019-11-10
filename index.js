@@ -10,16 +10,17 @@ const { KnexAdapter: Adapter } = require('@keystonejs/adapter-knex');
 // Configure Adapter
 const keystone = new Keystone({
   name: process.env.PROJECT_NAME,
-  defaultAccess: {
-    list: true,
-    field: true,
-  },
   adapter: new Adapter(require('./config/adapter')),
 });
 
-// create Lists
+// create Lists and items
 keystone.createList('User', require('./models/userSchema'));
 keystone.createList('UserAddress', require('./models/userAddressSchema'));
+
+// populate with seeds
+keystone.createItems({
+  User: require('./seeds/users')
+});
 
 const authStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
