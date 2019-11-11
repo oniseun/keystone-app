@@ -43,9 +43,9 @@ module.exports = {
     },
     access: {
         read: true,
-        update: access.userIsAdminOrOwner,
-        create: access.userIsAdminOrOwner,
-        delete: access.userIsAdminOrOwner,
+        update: access.userIsAdmin,
+        create: access.userIsAdmin,
+        delete: access.userIsAdmin,
         auth: true,
       }
 }

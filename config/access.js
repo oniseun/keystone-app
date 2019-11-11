@@ -8,9 +8,12 @@ const userOwnsItem = ({ authentication: { item: user } }) => {
   return { id: user.id };
 };
 const userIsAdminOrOwner = auth => {
+  console.log('access cntrol auth:: ', auth)
   const isAdmin = access.userIsAdmin(auth);
   const isOwner = access.userOwnsItem(auth);
   return isAdmin ? isAdmin : isOwner;
 };
 
-module.exports =  { userIsAdmin, userOwnsItem, userIsAdminOrOwner };
+const access =  { userIsAdmin, userOwnsItem, userIsAdminOrOwner };
+
+module.exports = access;

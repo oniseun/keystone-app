@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Keystone } = require('@keystonejs/keystone');
 const { PasswordAuthStrategy } = require('@keystonejs/auth-password');
-const { GraphQLApp } = require('@keystonejs/app-graphql');
+const { GraphQLApp, validation } = require('@keystonejs/app-graphql');
 const { AdminUIApp } = require('@keystonejs/app-admin-ui');
 const { StaticApp } = require('@keystonejs/app-static');
 
@@ -18,9 +18,9 @@ keystone.createList('User', require('./models/userSchema'));
 keystone.createList('UserAddress', require('./models/userAddressSchema'));
 
 // populate with seeds
-keystone.createItems({
-  User: require('./seeds/users')
-});
+// keystone.createItems({
+//   User: require('./seeds/users')
+// });
 
 const authStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
@@ -30,7 +30,9 @@ const authStrategy = keystone.createAuthStrategy({
 module.exports = {
   keystone,
   apps: [
-    new GraphQLApp(),
+    new GraphQLApp( { apollo: {
+      validationRules: [validation.depthLimit(3)],
+    }}),
     new StaticApp({ path: '/', src: 'public' }),
     new AdminUIApp({ enableDefaultRoute: true, authStrategy }),
   ],

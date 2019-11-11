@@ -10,8 +10,6 @@ const access =  require('./../config/access');
 
 module.exports = {
 
-    staticAccess: true,
-    access: true,
 
     label: "Users",
     fields: {
