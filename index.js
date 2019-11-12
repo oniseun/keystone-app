@@ -3,8 +3,7 @@ const { Keystone } = require('@keystonejs/keystone');
 const { PasswordAuthStrategy } = require('@keystonejs/auth-password');
 const { GraphQLApp, validation } = require('@keystonejs/app-graphql');
 const { AdminUIApp } = require('@keystonejs/app-admin-ui');
-const { StaticApp } = require('@keystonejs/app-static');
-
+const { NextApp } = require('@keystonejs/app-next');
 const { KnexAdapter: Adapter } = require('@keystonejs/adapter-knex');
 
 // Configure Adapter
@@ -30,10 +29,8 @@ const authStrategy = keystone.createAuthStrategy({
 module.exports = {
   keystone,
   apps: [
-    new GraphQLApp( { apollo: {
-      validationRules: [validation.depthLimit(3)],
-    }}),
-    new StaticApp({ path: '/', src: 'public' }),
-    new AdminUIApp({ enableDefaultRoute: true, authStrategy }),
+    new GraphQLApp( ),
+    new AdminUIApp({ enableDefaultRoute: false,  adminPath: '/admin', authStrategy }),
+    new NextApp({ dir: 'next.js' }),
   ],
 };
