@@ -42,7 +42,7 @@ module.exports = {
         }
     },
     access: {
-        read: true,
+        read: access.userIsAdmin,
         update: access.userIsAdmin,
         create: access.userIsAdmin,
         delete: access.userIsAdmin,

@@ -32,7 +32,7 @@ query GetUserList {
   }
   
   query GetAddress {
-    allUserAddresses(where: {town : "Lagos"}){
+    allUserAddresses{
       street,
       address1,
       address2,
@@ -42,5 +42,18 @@ query GetUserList {
     }
   }
   
+    query GetAddress {
+    allUserAddresses(where: {user_id : {id :1} }){
+      street,
+      address1,
+      address2,
+      suburb,
+      town,
+      user_id {
+        id
+      }
+      
+    }
+  }
   
   

@@ -1,7 +1,7 @@
 
 import Layout from '../components/FormLayout';
 import Header from '../components/Header';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input,Alert, Spinner } from 'reactstrap';
 import { useRef } from 'react'
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
@@ -24,11 +24,9 @@ mutation AuthUser($email: String!, $password: String!) {
 
 const LoginForm = () => {
 
-    const client = useApolloClient();
+  const client = useApolloClient();
 
-  const onCompleted = data => {
-    alert('Login Successfull')
-    alert(JSON.stringify(data))
+  const onCompleted = data => {   
 
     // Store the token in cookie
     document.cookie = cookie.serialize('token', data.authenticateUserWithPassword.token, {
@@ -38,18 +36,18 @@ const LoginForm = () => {
     })
 
     client.cache.reset().then(() => {
+      setTimeout(() => {
+
       redirect({}, '/addresses')
+      }, 2000)
     })
   }
 
   const onError = error => {
-    // If you want to send error to external service
-    console.error(error)
-    alert('on Error')
-    alert(error)
+    console.error(JSON.stringify(error))
   }
 
-  const [signinUser, { error }] = useMutation(LOGIN_QUERY, {
+  const [signinUser, { data, error }] = useMutation(LOGIN_QUERY, {
     onCompleted,
     onError,
   })
@@ -60,6 +58,14 @@ const LoginForm = () => {
 
   return  (<Layout>
         <Header title="Login Page"/>
+        {error && 
+            <Alert color="danger">
+            Incorrect username or password
+          </Alert>}
+          {data && 
+            <Alert color="success">
+            Logged in successfully , please wait... <Spinner color="success" /> 
+          </Alert>}
         <Form onSubmit={e => {
             e.preventDefault();
 
@@ -75,6 +81,7 @@ const LoginForm = () => {
           }}>
         <FormGroup>
             <Label for="bs_email">Email</Label>
+            
             <Input innerRef={email} type="email" name="email" id="bs_email" placeholder="" bsSize="lg"  />
           </FormGroup>
           <FormGroup>

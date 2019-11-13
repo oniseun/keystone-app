@@ -1,39 +1,43 @@
 
 import Layout from '../components/ListLayout';
 import Header from '../components/Header';
-import { Table } from 'reactstrap';
+import LogoutBar from '../components/LogoutBar';
+import { Table, Alert } from 'reactstrap';
 import { withApollo } from '../helpers/apollo'
 import redirect from '../helpers/redirect'
 import checkLoggedIn from '../helpers/checkLoggedIn'
 import gql from 'graphql-tag';
 import { useQuery} from '@apollo/react-hooks';
 
-const GET_ADDRESS =  gql`
-query GetAddress {
-    allUserAddresses{
-      id,
-      street,
-      address1,
-      address2,
-      suburb,
-      town
-      
+const GET_USER_ADDRESS_LIST =  gql`
+query GetAddress ($user_id: ID! ) {
+  allUserAddresses(where: {user_id : {id :$user_id} }){
+    street,
+    address1,
+    address2,
+    suburb,
+    town,
+    user_id {
+      id
     }
+    
   }
+}
 `
 
-const Addresses = () => {
-  //let variables = { variables: { user_id: props.loggedInUser.id }}
-  const { loading, error, data } = useQuery(GET_ADDRESS )
+const Addresses = ({loggedInUser}) => {
+
+
+try {
+
+  let variables = { variables: { user_id: loggedInUser.id }}
+  const { loading, error, data } = useQuery(GET_USER_ADDRESS_LIST, variables )
  
   if (loading) console.log('gql Loading...');
-  if (error) console.log( 'gql', error);
-  if(data) console.log('gql json data',JSON.stringify(data));
+  if (error) console.log( 'gql fetch address error', error);
 
   return( <Layout>
-                <p className="bg-info clearfix" style={{ padding: '.5rem' }}>
-                  <button className="btn btn-danger float-right">Logout</button>
-                </p>                
+                <LogoutBar username={loggedInUser.name} />               
                 <Header title="My Addresses"/>
                 <Table striped>
                   <thead>
@@ -49,8 +53,7 @@ const Addresses = () => {
                      {
                         data && data.allUserAddresses.length > 0 ?
 
-                            (
-                              data.allUserAddresses.map(details => 
+                            (  data.allUserAddresses.map(details => 
                                 (
                                   <tr key={details.id}>
                                     <td>{details.street}</td>
@@ -59,11 +62,8 @@ const Addresses = () => {
                                     <td>{details.suburb}</td>
                                     <td>{details.town}</td>
                                 </tr>
-                                )
-                              ) 
-                            ) :
-
-                              (
+                                )  ) 
+                            ) : (
                                 <tr>
                                   <td colSpan="5"><h4>User Has no addresses in list</h4></td>
                                 </tr>
@@ -74,29 +74,35 @@ const Addresses = () => {
                 </Table>
             </Layout>
 );
+
+  } catch(e) {
+
+    return (
+      <Layout>
+        <Header title="You are Logged Out"/>
+            <Alert color="danger">
+            Login again here <a href="/index">login page</a>
+          </Alert>
+      </Layout>
+    )
+  }
 }
 
 
 Addresses.getInitialProps = async context => {
-  const { loggedInUser } = await checkLoggedIn(context.apolloClient)
 
-  if (!loggedInUser.id) {
+  const auth = await checkLoggedIn(context.apolloClient)
 
-   // return redirect(context, '/index?rdrfromaddress');
+  if (!auth.hasOwnProperty('loggedInUser')) {
 
-
-   //const addressList = await getUserAdresses();
-    return {
-    
-    };
-
+     return redirect(context, `/index?rdr-time=${Date.now()}`);
   } else {
-    //const addressList = await getUserAdresses();
-    return {
-     //loggedInUser
-    };
+
+    const { loggedInUser } = auth;
+    return { loggedInUser } ;
   }
 
+ 
   
 };
 

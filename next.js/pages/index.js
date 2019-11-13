@@ -12,13 +12,14 @@ const IndexPage = () => (
 
 
 IndexPage.getInitialProps = async context => {
-  const { loggedInUser } = await checkLoggedIn(context.apolloClient)
+  const auth = await checkLoggedIn(context.apolloClient)
 
-  if (loggedInUser.id) {
-    redirect(context, '/addresses')
+  if (auth.hasOwnProperty('loggedInUser')) {
+    return redirect(context, `/addresses?rdr-time=${Date.now()}`);
   }
 
   return {}
+
 }
 
 export default withApollo(IndexPage);
