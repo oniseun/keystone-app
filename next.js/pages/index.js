@@ -1,24 +1,24 @@
 
-import Layout from '../components/FormLayout';
-import Header from '../components/Header';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { withApollo } from '../helpers/apollo'
+import redirect from '../helpers/redirect'
+import checkLoggedIn from '../helpers/checkLoggedIn'
+import LoginForm from '../components/LoginForm'
 
-const Login = () => (
-<Layout>
-    <Header title="Login Page"/>
-    <Form>
-    <FormGroup>
-        <Label for="bs_email">Email</Label>
-        <Input type="email" name="email" id="bs_email" placeholder="" size="lg"/>
-      </FormGroup>
-      <FormGroup>
-        <Label for="bs_pwd">Password</Label>
-        <Input type="password" name="password" id="bs_pwd" placeholder="" size="lg"/>
-      </FormGroup>
-      <br/>
-      <Button size="lg" color="primary" block>Login</Button>
-    </Form>
-</Layout>
-);
+const IndexPage = () => (
+  <>
+    <LoginForm />
+  </>
+)
 
-export default Login;
+
+IndexPage.getInitialProps = async context => {
+  const { loggedInUser } = await checkLoggedIn(context.apolloClient)
+
+  if (loggedInUser.id) {
+    redirect(context, '/addresses')
+  }
+
+  return {}
+}
+
+export default withApollo(IndexPage);

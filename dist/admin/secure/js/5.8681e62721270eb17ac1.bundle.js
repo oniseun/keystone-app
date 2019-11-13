@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{194:function(e,n,s){"use strict";s.r(n);var t=s(0);class o extends t.Component{render(){const{data:e}=this.props;return!0===e?"Checked":!1===e?"Unchecked":"Not set"}}n.default=o}}]);

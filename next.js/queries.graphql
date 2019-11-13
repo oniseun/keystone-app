@@ -1,0 +1,46 @@
+
+
+
+mutation Authuser{
+    authenticateUserWithPassword(email: "admin@admin.com", password: "password"){
+     token
+    }
+}
+query currentUser{
+    authenticatedUser{
+     id,
+      name
+    }
+  }
+query GetUserList {
+    allUsers{
+     id,
+    name,
+    email
+      
+    }
+  }
+  
+
+  query GetUserInfo {
+    User(where: {id : 1}){
+     id,
+    name,
+    email
+      
+    }
+  }
+  
+  query GetAddress {
+    allUserAddresses(where: {town : "Lagos"}){
+      street,
+      address1,
+      address2,
+      suburb,
+      town
+      
+    }
+  }
+  
+  
+  
