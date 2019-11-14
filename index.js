@@ -16,7 +16,7 @@ const keystone = new Keystone({
 keystone.createList('User', require('./models/userSchema'));
 keystone.createList('UserAddress', require('./models/userAddressSchema'));
 
-// populate with seeds
+//populate with seeds
 // keystone.createItems({
 //   User: require('./seeds/users')
 // });
@@ -30,7 +30,7 @@ module.exports = {
   keystone,
   apps: [
     new GraphQLApp( ),
-    new AdminUIApp({ enableDefaultRoute: false,  adminPath: '/admin', authStrategy }),
+    new AdminUIApp({ enableDefaultRoute: false,  adminPath: '/admin', graphiqlPath: '/graphql', authStrategy }),
     new NextApp({ dir: 'next.js' }),
   ],
 };

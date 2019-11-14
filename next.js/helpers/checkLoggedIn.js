@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
 
-export default apolloClient => 
-  new Promise((resolve, reject) => { apolloClient
+export default apolloClient => apolloClient
     .query({
       query: gql`
         query currentUser{
@@ -14,13 +13,12 @@ export default apolloClient =>
     })
     .then( ({ data } )=> {
 
-      return resolve( { loggedInUser: data.authenticatedUser })
+      return data.authenticatedUser !== null ? { loggedInUser: data.authenticatedUser } : {};
     })
     .catch(() => {
-      // Fail gracefully
-      return reject({  })
+      return {} ;
     })
-  });
+  
 
     /**
      * {"authenticatedUser":{"id":"1","name":"Admin","__typename":"User"}}

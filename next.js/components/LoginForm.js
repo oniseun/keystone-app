@@ -36,10 +36,10 @@ const LoginForm = () => {
     })
 
     client.cache.reset().then(() => {
-      setTimeout(() => {
-
-      redirect({}, '/addresses')
-      }, 2000)
+          setTimeout(() => {
+              return redirect({}, `/addresses?firstLogin=${Date.now()}`)
+          }, 2000)
+     
     })
   }
 

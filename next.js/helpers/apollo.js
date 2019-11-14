@@ -7,7 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { ApolloProvider } from '@apollo/react-hooks'
-import fetch from 'isomorphic-unfetch'
+import fetch from 'isomorphic-unfetch';
 
 
 export function withApollo(PageComponent, { ssr = true } = {}) {
@@ -60,9 +60,8 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
         : {}
 
       // Only on the server
-      if (typeof window === 'undefined') {
-        // When redirecting, the response is finished.
-        // No point in continuing to render
+      if (typeof window === 'undefined') { 
+        
         if (ctx.res && ctx.res.finished) {
           return {}
         }
@@ -85,8 +84,6 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
           }
         }
 
-        // getDataFromTree does not call componentWillUnmount
-        // head side effect therefore need to be cleared manually
         Head.rewind()
       }
 
@@ -105,10 +102,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
 
 let apolloClient = null
 
-/**
- * Always creates a new apollo client on the server
- * Creates or reuses apollo client in the browser.
- */
+
 function initApolloClient(...args) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
@@ -138,7 +132,7 @@ function createApolloClient(initialState = {}, { getToken }) {
   }
 
   const httpLink = new HttpLink({
-    uri: 'http://localhost:3000/admin/api', // Server URL (must be absolute)
+    uri: 'http://localhost:3000/admin/api', 
     credentials: 'same-origin',
     fetch,
     fetchOptions,

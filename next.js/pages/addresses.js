@@ -8,6 +8,7 @@ import redirect from '../helpers/redirect'
 import checkLoggedIn from '../helpers/checkLoggedIn'
 import gql from 'graphql-tag';
 import { useQuery} from '@apollo/react-hooks';
+import Link from 'next/link';
 
 const GET_USER_ADDRESS_LIST =  gql`
 query GetAddress ($user_id: ID! ) {
@@ -42,9 +43,9 @@ try {
                 <Table striped>
                   <thead>
                     <tr>
-                      <th>Street</th>
-                      <th>Address1</th>
-                      <th>Address2</th>
+                      <th style={{width: '15%'}}>Street</th>
+                      <th style={{width: '30%'}}>Address1</th>
+                      <th style={{width: '30%'}}>Address2</th>
                       <th>Suburb</th>
                       <th>Town</th>
                     </tr>
@@ -81,7 +82,10 @@ try {
       <Layout>
         <Header title="You are Logged Out"/>
             <Alert color="danger">
-            Login again here <a href="/index">login page</a>
+            Click 
+            <Link href="/index?from_addres" >
+              <a>here</a>
+            </Link> to login again
           </Alert>
       </Layout>
     )
@@ -93,9 +97,11 @@ Addresses.getInitialProps = async context => {
 
   const auth = await checkLoggedIn(context.apolloClient)
 
+
   if (!auth.hasOwnProperty('loggedInUser')) {
 
-     return redirect(context, `/index?rdr-time=${Date.now()}`);
+     return redirect(context, `/index?rdr-time=${Date.now()}`); 
+    
   } else {
 
     const { loggedInUser } = auth;

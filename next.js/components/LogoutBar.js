@@ -1,8 +1,7 @@
 import { Button } from 'reactstrap';
 import { useApolloClient} from '@apollo/react-hooks';
 import cookie from 'cookie';
-import redirect from '../helpers/redirect'
-
+import redirect from 'nextjs-redirect'
 
 
 
@@ -16,10 +15,12 @@ const LogoutBar = (props) => {
         document.cookie = cookie.serialize('token', '', {
           maxAge: -1, 
         });
-      
-        client.cache.reset().then(() => {
-          redirect({}, '/index')
+        
+        client.clearStore().then(() => {
+
+          redirect( `/index?logout=${Date.now()}`)
         })
+
       }
 
       return (
