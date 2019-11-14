@@ -43,5 +43,11 @@ module.exports = {
         create: access.userIsAdmin,
         delete: access.userIsAdmin,
         auth: true,
+      },
+      adminConfig: {
+        defaultColumns: 'name, email, isAdmin',
+        defaultPageSize: 50,
+        defaultSort: 'name',
+        maximumPageSize: 100,
       }
 }

@@ -29,7 +29,7 @@ query GetAddress ($user_id: ID! ) {
 const Addresses = ({loggedInUser}) => {
 
 
-try {
+ try {
 
   let variables = { variables: { user_id: loggedInUser.id }}
   const { loading, error, data } = useQuery(GET_USER_ADDRESS_LIST, variables )
@@ -38,8 +38,9 @@ try {
   if (error) console.log( 'gql fetch address error', error);
 
   return( <Layout>
-                <LogoutBar username={loggedInUser.name} />               
+                <LogoutBar username={loggedInUser.name} />  
                 <Header title="My Addresses"/>
+              
                 <Table striped>
                   <thead>
                     <tr>
@@ -84,7 +85,7 @@ try {
             <Alert color="danger">
             Click 
             <Link href="/index?from_addres" >
-              <a>here</a>
+               <a> here </a> 
             </Link> to login again
           </Alert>
       </Layout>
@@ -99,7 +100,6 @@ Addresses.getInitialProps = async context => {
 
 
   if (!auth.hasOwnProperty('loggedInUser')) {
-
      return redirect(context, `/index?rdr-time=${Date.now()}`); 
     
   } else {

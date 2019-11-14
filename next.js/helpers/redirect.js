@@ -6,7 +6,10 @@ export default (context, target) => {
     context.res.writeHead(303, { Location: target })
     context.res.end()
   } else {
-    
+
+    if(window) {
+       window.location.replace(target)
+   }
     Router.replace(target)
   }
 }
